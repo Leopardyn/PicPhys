@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>QuedaLivreCam</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="./icons/icon-192.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker registrado!', reg))
+                    .catch(err => console.error('Erro ao registrar Service Worker', err));
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>QuedaLivreCam</h1>
+            <p>Física e Cinemática Estroboscópica</p>
+        </header>
+
+        <main>
+            <div class="viewfinder-container">
+                <video id="cameraApp" autoplay playsinline muted></video>
+                <canvas id="compositeCanvas"></canvas>
+                <div class="status-indicator" id="statusIndicator">Câmera Pronta</div>
+            </div>
+
+            <div class="controls-panel">
+                <div class="control-group">
+                    <label for="freqSlider">Frequência: <span id="freqValue">10</span> fotos/s</label>
+                    <input type="range" id="freqSlider" min="1" max="30" value="10">
+                </div>
+
+                <div class="control-group">
+                    <label for="threshSlider">Sensibilidade (Movimento): <span id="threshValue">40</span></label>
+                    <input type="range" id="threshSlider" min="10" max="100" value="40">
+                </div>
+
+                <div class="control-group" id="exposureControlGroup" style="display: none;">
+                    <label for="exposureSlider">Tempo de Abertura (Fixa Borrão): <span id="exposureValue">-</span></label>
+                    <input type="range" id="exposureSlider">
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="btnCapture">
+                        <span class="icon">⏺</span> Iniciar Captura
+                    </button>
+                    <button class="btn btn-danger" id="btnStop" disabled>
+                        <span class="icon">⏹</span> Parar
+                    </button>
+                </div>
+                
+                <div class="action-buttons mt-1">
+                    <button class="btn btn-secondary" id="btnReset">
+                        <span class="icon">↺</span> Limpar
+                    </button>
+                    <button class="btn btn-success" id="btnDownload">
+                        <span class="icon">⬇</span> Salvar Foto
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Hidden canvas for processing -->
+    <canvas id="processCanvas" style="display: none;"></canvas>
+
+    <script src="app.js"></script>
+</body>
+</html>
